@@ -1,5 +1,6 @@
 ﻿using api.Domaine.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace api.Extensions
 {
@@ -9,6 +10,7 @@ namespace api.Extensions
         {
             var configuration = builder.Configuration;
 
+            builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
             builder.Services
             .AddEndpointsApiExplorer()
             .AddSwaggerGen();
@@ -24,6 +26,7 @@ namespace api.Extensions
                    .UseSwaggerUI();
             }
 
+            app.UseSerilogRequestLogging();
             app.UseHttpsRedirection();
         }
     }
