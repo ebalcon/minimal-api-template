@@ -1,4 +1,7 @@
 ﻿using api.Domaine.Data;
+using api.Dto;
+using api.Validator;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -58,6 +61,8 @@ namespace api.Extensions
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Authentication:Token"]))
                     };
                 });
+
+            builder.Services.AddScoped<IValidator<RegisterDto>, RegisterValidator>();
 
             builder.Services.AddAuthorization();
 

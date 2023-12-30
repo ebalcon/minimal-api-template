@@ -1,6 +1,7 @@
 ﻿using api.Domaine.Data;
 using api.Domaine.Models;
 using api.Dto;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
@@ -42,11 +43,15 @@ namespace api.Endpoints
                 .WithOpenApi();
         }
 
-        private static async Task<IResult> Register(SqlContext context, RegisterDto input)
+        private static async Task<IResult> Register(SqlContext context, IValidator<RegisterDto> validator, RegisterDto input)
         {
-
             if (context.Users.Any(x => x.Email == input.Email))
                 return Results.BadRequest();
+
+            var validation = await validator.ValidateAsync(input);
+
+            if (!validation.IsValid)
+                return Results.BadRequest(validation.Errors);
 
             var user = new User
             {

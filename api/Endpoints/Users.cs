@@ -15,6 +15,7 @@ namespace api.Endpoints
                 .WithSummary("Get all the users.")
                 .Produces<List<UserDto>>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status401Unauthorized)
+                .RequireAuthorization()
                 .WithOpenApi();
 
             users.MapGet("/{id}", GetOne).WithName("getOne")
@@ -23,6 +24,7 @@ namespace api.Endpoints
                 .Produces<UserDto>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status404NotFound)
                 .Produces(StatusCodes.Status401Unauthorized)
+                .RequireAuthorization()
                 .WithOpenApi();
         }
 
